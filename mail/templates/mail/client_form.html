@@ -10,11 +10,20 @@
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-outline-success">
+                                {% if object %}
+                                Сохранить
+                                {% else %}
+                                Создать
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'mail:home' %}"
+                               class="btn btn-outline-danger">Отмена</a>
+                        </div>
                     </form>
 
-                    <button type="submit" class="btn btn-success">Добавить клиента</button>
-                    <a href="{% url 'mail:home' %}"
-                       class="btn m-5 btn-lg btn-block btn-outline-primary">Отмена</a>
+
                 </div>
             </div>
         </div>

@@ -21,8 +21,8 @@ class Client(models.Model):
 class SettingMail(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент')
 
-    mailing_time = models.DateTimeField(verbose_name='время рассылки')
-    period = models.CharField(max_length=20, verbose_name='периодичность')
+    mailing_time = models.TimeField(verbose_name='время рассылки')
+    period = models.PositiveIntegerField(verbose_name='периодичность', default=1)
     status = models.CharField(max_length=20, verbose_name='статус')
 
     def __str__(self):

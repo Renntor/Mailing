@@ -1,0 +1,42 @@
+{% extends 'mail/base.html'%}
+{% block content %}
+
+<div class="container">
+    <div class="row text-start">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">Добавление настройки</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>
+                            {{ form.client }}
+                        </p>
+                        <p>
+                            <label for="mailing_time">Время рассылки</label>
+                            <input type="time" id="mailing_time" name='mailing_time'>
+                        </p>
+                        <p>
+                            <label for="period">Периодичность:</label>
+                            <select id="period" name="period">
+                                <option value='1'>Раз в день</option>
+                                <option value="7">Раз в неделю</option>
+                                <option value="30">Раз в месяц</option>
+                            </select>
+                        </p>
+
+                        <div class="btn-group">
+
+                            <button type="submit" class="btn btn-outline-success">Сохранить</button>
+                            <a href="{% url 'mail:list_setting' %}"
+                               class="btn btn-outline-warning">Отмена</a>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
