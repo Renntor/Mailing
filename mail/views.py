@@ -29,10 +29,6 @@ class ClientDeleteView(DeleteView):
     model = Client
 
 
-class SettingMailDetailView(DetailView):
-    model = SettingMail
-
-
 class SettingMailListView(ListView):
     model = SettingMail
 
@@ -47,3 +43,27 @@ class SettingUpdateView(UpdateView):
     model = SettingMail
     fields = ('client', 'mailing_time', 'period')
     success_url = reverse_lazy('mail:list_setting')
+
+
+class SettingMailDeleteView(DeleteView):
+    model = SettingMail
+
+
+class MailingListView(ListView):
+    model = Mailing
+
+
+class MailingCreateView(CreateView):
+    model = Mailing
+    fields = ('setting', 'subject', 'text')
+    success_url = reverse_lazy('mail:list_mail')
+
+
+class MailingUpdateView(UpdateView):
+    model = Mailing
+    fields = ('setting', 'subject', 'text')
+    success_url = reverse_lazy('mail:list_mail')
+
+
+class MailingDeleteView(DeleteView):
+    model = Mailing

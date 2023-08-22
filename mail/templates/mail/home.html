@@ -21,8 +21,14 @@
                 <th scope="row">{{object.full_name}}</th>
                 <td>{{ object.email}}</td>
                 <td> {{object.comment | truncatechars:20}}</td>
-                <td> <a href="{% url 'mail:edit_client' object.pk %}"
-                       class="btn btn-sm btn-outline-success">Редактировать</a> </td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'mail:edit_client' object.pk %}"
+                           class="btn btn-sm btn-outline-success">Редактировать</a>
+                        <a href="{% url 'mail:delete_client' object.pk %}"
+                           class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </div>
+                </td>
             </tr>
             </tbody>
             {% endfor %}

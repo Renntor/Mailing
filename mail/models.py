@@ -34,7 +34,7 @@ class SettingMail(models.Model):
 
 
 class Mailing(models.Model):
-    setting = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='настройки')
+    setting = models.ForeignKey(SettingMail, on_delete=models.CASCADE, verbose_name='настройки')
 
     subject = models.TextField(default='no subject', verbose_name='тема')
     text = models.TextField(verbose_name='текст')
@@ -48,7 +48,7 @@ class Mailing(models.Model):
 
 
 class Log(models.Model):
-    mail = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='сообщение')
+    mail = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='сообщение')
 
     date_last_try = models.DateTimeField(verbose_name='время последний попытки')
     status_try = models.CharField(max_length=50, verbose_name='статус')
