@@ -1,0 +1,23 @@
+{% extends 'mail/base.html'%}
+{% block content %}
+
+<div class="container">
+    <div class="row text-start">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">Добавление клиента</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </form>
+
+                    <button type="submit" class="btn btn-success">Добавить клиента</button>
+                    <a href="{% url 'mail:home' %}"
+                       class="btn m-5 btn-lg btn-block btn-outline-primary">Отмена</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
