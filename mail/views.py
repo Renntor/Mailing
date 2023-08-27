@@ -4,7 +4,6 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from mail.models import Client, SettingMail, Mailing, Log
 from django.shortcuts import get_object_or_404
-
 # Create your views here.
 
 
@@ -67,3 +66,7 @@ class MailingUpdateView(UpdateView):
 
 class MailingDeleteView(DeleteView):
     model = Mailing
+
+
+class LogListView(ListView):
+    model = Log
