@@ -34,13 +34,13 @@ class SettingMailListView(ListView):
 
 class SettingMailCreateView(CreateView):
     model = SettingMail
-    fields = ('client', 'mailing_time', 'period')
+    fields = '__all__'
     success_url = reverse_lazy('mail:list_setting')
 
 
 class SettingUpdateView(UpdateView):
     model = SettingMail
-    fields = ('client', 'mailing_time', 'period')
+    fields = '__all__'
     success_url = reverse_lazy('mail:list_setting')
 
 

@@ -35,9 +35,13 @@
 </div>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <p><a href="{% url 'mail:create_mail' %}"
-              class="btn m-5 btn-lg btn-block btn-outline-primary">Добавить письмо</a></p>
+    <div class="btn-group">
+        <a href="{% url 'mail:create_mail' %}"
+              class="btn btn-lg btn-block btn-outline-primary">Добавить письмо</a>
+            <a href="{% url 'mail:list_log' %}"
+           class="btn btn-lg btn-block btn-outline-primary">Детали</a>
     </div>
+</div>
 
 
 {% endblock %}

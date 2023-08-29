@@ -1,8 +1,8 @@
-from mail.service import _send_mail
+from mail.service import shipment_check
 from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        _send_mail()
+        shipment_check()

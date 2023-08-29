@@ -19,11 +19,23 @@ class Client(models.Model):
 
 
 class SettingMail(models.Model):
+    choice_status = [
+        ('create', 'Создана'),
+        ('start', 'Запущена'),
+        ('finish', 'Закончена'),
+    ]
+
+    choice_period = [
+        (1, 'Раз в день'),
+        (7, 'Раз в неделю'),
+        (31, 'Раз в месяц'),
+    ]
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент')
 
     mailing_time = models.TimeField(verbose_name='время рассылки')
-    period = models.PositiveIntegerField(verbose_name='периодичность', default=1)
-    status = models.CharField(max_length=20, verbose_name='статус')
+    period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность', )
+    status = models.CharField(choices=choice_status, default='create', verbose_name='статус')
 
     def __str__(self):
         return f'{self.mailing_time}, {self.period}, {self.status}'
@@ -49,6 +61,7 @@ class Mailing(models.Model):
 
 class Log(models.Model):
     mail = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='сообщение')
+    setting = models.ForeignKey(SettingMail, on_delete=models.CASCADE, verbose_name='настройки')
 
     date_last_try = models.DateTimeField(verbose_name='время последний попытки')
     status_try = models.CharField(max_length=50, verbose_name='статус')

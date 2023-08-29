@@ -149,5 +149,5 @@ EMAIL_USE_SSL = False
 
 
 CRONJOBS = [
-    ('*/5 * * * *', 'mail.service._send_mail'),
+    ('*/5 * * * *', 'mail.service.shipment_check'),
 ]
