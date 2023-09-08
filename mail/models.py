@@ -19,11 +19,6 @@ class Client(models.Model):
 
 
 class SettingMail(models.Model):
-    choice_status = [
-        ('create', 'Создана'),
-        ('start', 'Запущена'),
-        ('finish', 'Закончена'),
-    ]
 
     choice_period = [
         (1, 'Раз в день'),
@@ -35,7 +30,7 @@ class SettingMail(models.Model):
 
     mailing_time = models.TimeField(verbose_name='время рассылки')
     period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность', )
-    status = models.CharField(choices=choice_status, default='create', verbose_name='статус')
+    status = models.BooleanField(default=False, verbose_name='статус')
 
     def __str__(self):
         return f'{self.mailing_time}, {self.period}, {self.status}'

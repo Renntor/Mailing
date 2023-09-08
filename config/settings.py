@@ -150,7 +150,7 @@ EMAIL_USE_SSL = False
 
 
 CRONJOBS = [
-    ('*/5 * * * *', 'mail.service.shipment_check'),
+    ('*/1 * * * *', 'mail.service.shipment_check'),
 ]
 
 AUTH_USER_MODEL = 'users.User'

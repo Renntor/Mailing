@@ -4,7 +4,7 @@ from mail.service import _send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from users.froms import UserRegisterForm, LoginForm
+from users.forms import UserRegisterForm, LoginForm
 from users.services import generate_random_key
 
 from users.models import User
@@ -40,6 +40,7 @@ class ProfileView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
 def verification(request):
     key = request.GET.get('key')
     user = User.objects.filter(mail_key=key)[0]
@@ -48,8 +49,10 @@ def verification(request):
         user.save()
     return redirect('users:login')
 
+
 def forgotten_password(request):
     pass
+
 
 class UserLoginView(LoginView):
     form_class = LoginForm
