@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'mail',
     'users',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
-        'HOST': '127.0.0.1',
+        'HOST': os.getenv('HOST_NAME'),
         'PORT': 5432,
         'PASSWORD': os.getenv('DB_PASSWORD'),
     }

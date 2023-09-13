@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from mail.service import _send_mail
@@ -9,7 +11,7 @@ from users.services import generate_random_key
 
 from users.models import User
 
-
+load_dotenv()
 # Create your views here.
 
 
@@ -27,7 +29,8 @@ class RegisterView(CreateView):
             new_user.is_active = False
             new_user.save()
             _send_mail('Верификация',
-                       f'Пройдите по ссылки для верификации:\n http://127.0.0.1:8000/users/verification/?key={key}',
+                       f'Пройдите по ссылки для верификации:\n http://{os.getenv("DOMAIN_NAME")}\
+/users/verification/?key={key}',
                        new_user.email)
         return super().form_valid(form)
 

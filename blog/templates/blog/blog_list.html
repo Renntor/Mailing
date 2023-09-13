@@ -1,0 +1,36 @@
+{% extends 'mail/base.html'%}
+{% block content %}
+{% load my_tags %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4 text-dark">Новости</h1>
+</div>
+
+<div class="container">
+    <div class="row text-start">
+
+        {% for object in object_list %}
+        <div class="col-6">
+            <div class="card mb-4 box-shadow">
+                <div class="card-head">
+                    {% if object.image %}
+                    <img src="{% mediapath %}{{object.image}}" class="card-img-top">
+                    {% else %}
+                    {% endif %}
+                    <h1 class="my-0 font-weight-normal card-title" align="center">{{ object.title }}</h1>
+                </div>
+                <div class="card-body">
+                    {% if object.content < 101 %}
+                    <h6>{{object.content}}</h6>
+                    {% else %}
+                    <h6>{{object.content|truncatechars:100}}</h6>
+                    {% endif %}
+                    <p class="text" align="right">Дата создания: {{ object.publication}} </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

@@ -18,6 +18,7 @@
             </thead>
             <tbody>
             {% for object in object_list %}
+            {% if object.client.owner == user or user.is_staff %}
             <tr>
                 <th scope="row">{{object.client.email}}</th>
                 <td>{{ object.mailing_time}}</td>
@@ -31,6 +32,7 @@
                                 </div></td>
             </tr>
             </tbody>
+            {% endif %}
             {% endfor %}
         </table>
     </div>

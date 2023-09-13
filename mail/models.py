@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -6,12 +7,15 @@ NULLABLE = {'null': True, 'blank': True}
 
 
 class Client(models.Model):
-    email = models.EmailField(unique=True, verbose_name='почта')
+    email = models.EmailField(**NULLABLE, verbose_name='почта')
     full_name = models.CharField(max_length=100, verbose_name='фио')
     comment = models.TextField(**NULLABLE, verbose_name='комментарий')
 
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
+                              verbose_name='владелец')
+
     def __str__(self):
-        return f'{self.email}, {self.full_name}, {self.comment}'
+        return f'{self.email}, {self.full_name}, {self.comment}, {self.owner}'
 
     class Meta:
         verbose_name = 'клиент'
@@ -19,14 +23,13 @@ class Client(models.Model):
 
 
 class SettingMail(models.Model):
-
     choice_period = [
         (1, 'Раз в день'),
         (7, 'Раз в неделю'),
         (31, 'Раз в месяц'),
     ]
 
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, **NULLABLE, verbose_name='клиент')
 
     mailing_time = models.TimeField(verbose_name='время рассылки')
     period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность', )

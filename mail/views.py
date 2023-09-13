@@ -1,3 +1,4 @@
+from django.forms import inlineformset_factory
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from mail.forms import ClientForm, SettingMailForm, MailingForm
@@ -9,6 +10,14 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mail:home')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.client = self.request.user
+        self.object.owner = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
 
 
 class ClientListView(ListView):
@@ -24,6 +33,7 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
+    success_url = reverse_lazy('mail:home')
 
 
 class SettingMailListView(LoginRequiredMixin, ListView):
@@ -35,6 +45,14 @@ class SettingMailCreateView(LoginRequiredMixin, CreateView):
     form_class = SettingMailForm
     success_url = reverse_lazy('mail:list_setting')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        owner = Client.objects.filter(email=self.request.user)[0]
+        self.object.client = owner
+        self.object.save()
+
+        return super().form_valid(form)
+
 
 class SettingUpdateView(LoginRequiredMixin, UpdateView):
     model = SettingMail
@@ -42,8 +60,11 @@ class SettingUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('mail:list_setting')
 
 
+
+
 class SettingMailDeleteView(LoginRequiredMixin, DeleteView):
     model = SettingMail
+    success_url = reverse_lazy('mail:list_setting')
 
 
 class MailingListView(LoginRequiredMixin, ListView):
@@ -56,6 +77,13 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('mail:list_mail')
 
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        qs = [i for i in SettingMail.objects.all() if i.status == True]
+        context['setting'] = qs
+        return context
+
+
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
@@ -64,6 +92,7 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
+    success_url = reverse_lazy('mail:list_mail')
 
 
 class LogListView(LoginRequiredMixin, ListView):

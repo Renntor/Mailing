@@ -18,6 +18,7 @@
             </thead>
             <tbody>
             {% for object in object_list %}
+            {% if user == object.owner or user.is_superuser or user.is_staff %}
             <tr>
                 <th scope="row">{{object.full_name}}</th>
                 <td>{{ object.email}}</td>
@@ -32,6 +33,7 @@
                 </td>
             </tr>
             </tbody>
+            {% endif %}
             {% endfor %}
         </table>
     </div>
