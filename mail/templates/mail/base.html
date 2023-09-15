@@ -39,7 +39,9 @@
                             <li><a class="text-muted" href="#">Клиенты</a></li>
                             <li><a class="text-muted" href="#">Рассылки</a></li>
                             <li><a class="text-muted" href="#">Сообщение для рассылки</a></li>
-                            <li><a class="text-muted" href="#">Логи</a></li>
+                            {% if user.is_superuser %}
+                            <li><a class="text-muted" href="{% url 'mail:list_log' %}">Логи</a></li>
+                            {% endif %}
                         </ul>
                     </div>
 

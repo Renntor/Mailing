@@ -1,9 +1,12 @@
 from django.forms import inlineformset_factory
+from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from mail.forms import ClientForm, SettingMailForm, MailingForm
 from mail.models import Client, SettingMail, Mailing, Log
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from mail.service import random_blog
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
@@ -22,18 +25,17 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 class ClientListView(ListView):
     model = Client
-    template_name = 'mail/home.html'
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('mail:home')
+    success_url = reverse_lazy('mail:client')
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
-    success_url = reverse_lazy('mail:home')
+    success_url = reverse_lazy('mail:client')
 
 
 class SettingMailListView(LoginRequiredMixin, ListView):
@@ -47,7 +49,7 @@ class SettingMailCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        owner = Client.objects.filter(email=self.request.user)[0]
+        owner = Client.objects.get(email=self.request.user)
         self.object.client = owner
         self.object.save()
 
@@ -58,8 +60,6 @@ class SettingUpdateView(LoginRequiredMixin, UpdateView):
     model = SettingMail
     form_class = SettingMailForm
     success_url = reverse_lazy('mail:list_setting')
-
-
 
 
 class SettingMailDeleteView(LoginRequiredMixin, DeleteView):
@@ -77,13 +77,6 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('mail:list_mail')
 
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        qs = [i for i in SettingMail.objects.all() if i.status == True]
-        context['setting'] = qs
-        return context
-
-
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
@@ -97,3 +90,11 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
 
 class LogListView(LoginRequiredMixin, ListView):
     model = Log
+
+
+def title(request):
+    context = {'blog_list': random_blog(),
+               'count_mailing': len(Log.objects.filter(status_try='finish')),
+               'count_active': len(SettingMail.objects.filter(status=True)),
+               'count_client': len(Client.objects.all())}
+    return render(request, 'mail/home.html', context=context)

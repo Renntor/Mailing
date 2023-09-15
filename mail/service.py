@@ -1,4 +1,7 @@
+import random
+
 from mail.models import Mailing, Log, SettingMail
+from blog.models import Blog
 from django.core.mail import send_mail
 from django.conf import settings
 import datetime
@@ -28,3 +31,10 @@ def shipment_check():
             else:
                 _send_mail(mail.subject, mail.text, mail.setting.client.email)
                 Log.objects.create(mail=mail, setting=mail.setting, date_last_try=datetime_now, status_try='finish')
+
+
+def random_blog() -> list:
+    """
+    Возвращает список из 3 случайных статей
+    """
+    return Blog.objects.order_by('?')[:3]
