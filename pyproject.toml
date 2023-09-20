@@ -13,6 +13,7 @@ django-crontab = "^0.7.1"
 ipython = "^8.14.0"
 python-dotenv = "^1.0.0"
 pillow = "^10.0.0"
+redis = "^5.0.0"
 
 
 [build-system]

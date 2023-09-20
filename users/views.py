@@ -1,17 +1,19 @@
 import os
-from dotenv import load_dotenv
+
 from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView
 from mail.service import _send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from users.forms import UserRegisterForm, LoginForm
+from users.forms import UserRegisterForm, LoginForm, UserProfiledFrom
 from users.services import generate_random_key
-
+from dotenv import load_dotenv
 from users.models import User
 
 load_dotenv()
+
+
 # Create your views here.
 
 
@@ -30,14 +32,13 @@ class RegisterView(CreateView):
             new_user.save()
             _send_mail('Верификация',
                        f'Пройдите по ссылки для верификации:\n http://{os.getenv("DOMAIN_NAME")}\
-/users/verification/?key={key}',
-                       new_user.email)
+/users/verification/?key={key}', new_user.email)
         return super().form_valid(form)
 
 
 class ProfileView(UpdateView):
     model = User
-    form_class = UserRegisterForm
+    form_class = UserProfiledFrom
     success_url = reverse_lazy('users:profile')
 
     def get_object(self, queryset=None):

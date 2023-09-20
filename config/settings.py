@@ -151,7 +151,7 @@ EMAIL_USE_SSL = False
 
 
 CRONJOBS = [
-    ('*/1 * * * *', 'mail.service.shipment_check'),
+    ('* */1 * * *', 'mail.service.shipment_check'),
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -159,3 +159,13 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'
 
+CACHE_ENABLE = os.getenv('CACHE_ENABLE') == 'True'
+
+if CACHE_ENABLE:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://127.0.0.1:6379',
+            'TIMEOUT': 3600
+        }
+    }

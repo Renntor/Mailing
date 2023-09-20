@@ -6,7 +6,7 @@ from mail.forms import ClientForm, SettingMailForm, MailingForm
 from mail.models import Client, SettingMail, Mailing, Log
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from mail.service import random_blog
+from mail.service import random_blog, get_cached_count_mailing, get_cached_count_active, get_cached_count_client
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
@@ -47,13 +47,14 @@ class SettingMailCreateView(LoginRequiredMixin, CreateView):
     form_class = SettingMailForm
     success_url = reverse_lazy('mail:list_setting')
 
-    def form_valid(self, form):
-        self.object = form.save()
-        owner = Client.objects.get(email=self.request.user)
-        self.object.client = owner
-        self.object.save()
 
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     self.object = form.save()
+    #     owner = self.request.user
+    #     self.object.client = owner
+    #     self.object.save()
+    #
+    #     return super().form_valid(form)
 
 
 class SettingUpdateView(LoginRequiredMixin, UpdateView):
@@ -76,6 +77,16 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
     success_url = reverse_lazy('mail:list_mail')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     print(queryset)
+    #     return queryset
+
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
@@ -94,7 +105,7 @@ class LogListView(LoginRequiredMixin, ListView):
 
 def title(request):
     context = {'blog_list': random_blog(),
-               'count_mailing': len(Log.objects.filter(status_try='finish')),
-               'count_active': len(SettingMail.objects.filter(status=True)),
-               'count_client': len(Client.objects.all())}
+               'count_mailing': len(get_cached_count_mailing()),
+               'count_active': len(get_cached_count_active()),
+               'count_client': len(get_cached_count_client())}
     return render(request, 'mail/home.html', context=context)

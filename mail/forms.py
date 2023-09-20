@@ -1,6 +1,7 @@
 from users.forms import StyleFormMixin
 from django import forms
 from mail.models import Client, SettingMail, Mailing
+from django.contrib.admin import widgets
 
 
 class ClientForm(StyleFormMixin, forms.ModelForm):
@@ -10,14 +11,20 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 
 
 class SettingMailForm(StyleFormMixin, forms.ModelForm):
+    # mailing_time = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime)
+    client = forms.ModelMultipleChoiceField(queryset=Client.objects.filter(email='denis305@yandex.ru'), required=False)
+
     class Meta:
         model = SettingMail
-        fields = ('mailing_time', 'period', 'status',)
+        fields = ('client' ,'mailing_time', 'period', 'status',)
 
 
 class MailingForm(StyleFormMixin, forms.ModelForm):
-
+    setting = forms.ModelMultipleChoiceField(queryset=SettingMail.objects.filter(status=True), required=False)
 
     class Meta:
         model = Mailing
-        fields = '__all__'
+        fields = ('setting', 'subject', 'text',)
+
+
+

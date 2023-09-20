@@ -36,9 +36,9 @@
                     <div class="col-6 col-md">
                         <h5>Категории</h5>
                         <ul class="list-unstyled text-small">
-                            <li><a class="text-muted" href="#">Клиенты</a></li>
-                            <li><a class="text-muted" href="#">Рассылки</a></li>
-                            <li><a class="text-muted" href="#">Сообщение для рассылки</a></li>
+                            <li><a class="text-muted" href="{% url 'mail:client' %}">Клиенты</a></li>
+                            <li><a class="text-muted" href="{% url 'mail:list_setting' %}">Рассылки</a></li>
+                            <li><a class="text-muted" href="{% url 'mail:list_mail' %}">Сообщение для рассылки</a></li>
                             {% if user.is_superuser %}
                             <li><a class="text-muted" href="{% url 'mail:list_log' %}">Логи</a></li>
                             {% endif %}

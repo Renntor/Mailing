@@ -15,7 +15,7 @@ class Client(models.Model):
                               verbose_name='владелец')
 
     def __str__(self):
-        return f'{self.email}, {self.full_name}, {self.comment}, {self.owner}'
+        return f'{self.email}'
 
     class Meta:
         verbose_name = 'клиент'
@@ -35,6 +35,9 @@ class SettingMail(models.Model):
     period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность', )
     status = models.BooleanField(default=False, verbose_name='статус')
 
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
+                              verbose_name='владелец')
+
     def __str__(self):
         return f'{self.mailing_time}, {self.period}, {self.status}'
 
@@ -48,6 +51,9 @@ class Mailing(models.Model):
 
     subject = models.TextField(default='no subject', verbose_name='тема')
     text = models.TextField(verbose_name='текст')
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
+                              verbose_name='владелец')
 
     def __str__(self):
         return f'{self.subject}, {self.text}'
