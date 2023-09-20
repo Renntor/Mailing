@@ -47,6 +47,14 @@ class SettingMailCreateView(LoginRequiredMixin, CreateView):
     form_class = SettingMailForm
     success_url = reverse_lazy('mail:list_setting')
 
+    def get_form_kwargs(self):
+        """
+        Переопределяем метод для передачи user в форму SettingMailForm
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
     # def form_valid(self, form):
     #     self.object = form.save()
@@ -77,15 +85,13 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
     success_url = reverse_lazy('mail:list_mail')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        return context
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     print(queryset)
-    #     return queryset
+    def get_form_kwargs(self):
+        """
+        Переопределяем метод для передачи user в форму MailingForm
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):

@@ -5,6 +5,9 @@ from django.contrib.admin import widgets
 
 
 class ClientForm(StyleFormMixin, forms.ModelForm):
+    """
+
+    """
     class Meta:
         model = Client
         exclude = ('owner',)
@@ -12,19 +15,29 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 
 class SettingMailForm(StyleFormMixin, forms.ModelForm):
     # mailing_time = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime)
-    client = forms.ModelMultipleChoiceField(queryset=Client.objects.filter(email='denis305@yandex.ru'), required=False)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.user = user
+        if self.user:
+            self.fields['client'].queryset = Client.objects.filter(owner=self.user)
+
 
     class Meta:
         model = SettingMail
-        fields = ('client' ,'mailing_time', 'period', 'status',)
+        fields = ('client', 'mailing_time', 'period', 'status',)
 
 
 class MailingForm(StyleFormMixin, forms.ModelForm):
-    setting = forms.ModelMultipleChoiceField(queryset=SettingMail.objects.filter(status=True), required=False)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.user = user
+        if self.user:
+            self.fields['setting'].queryset = SettingMail.objects.filter(status=True, owner=self.user)
 
     class Meta:
         model = Mailing
         fields = ('setting', 'subject', 'text',)
-
-
-
