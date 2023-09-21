@@ -1,72 +1,125 @@
+from django.forms import inlineformset_factory
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
-from django.core.mail import send_mail
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from mail.forms import ClientForm, SettingMailForm, MailingForm
 from mail.models import Client, SettingMail, Mailing, Log
-from django.shortcuts import get_object_or_404
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from mail.service import random_blog, get_cached_count_mailing, get_cached_count_active, get_cached_count_client
 
 
-class ClientCreateView(CreateView):
+class ListMixin:
+    """
+    Миксин для ограничения видимости объектов
+    """
+    def get_queryset(self):
+        if self.request.user.is_superuser or self.request.user.is_staff:
+            return super().get_queryset().all()
+        else:
+            return super().get_queryset().filter(owner=self.request.user)
+
+
+class CreateMixin:
+
+    """
+    Миксин для указания владельца
+    """
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
+
+
+class ClientCreateView(LoginRequiredMixin, CreateMixin, CreateView):
     model = Client
-    fields = ('full_name', 'email', 'comment')
-    success_url = reverse_lazy('mail:home')
+    form_class = ClientForm
+    success_url = reverse_lazy('mail:client')
 
 
-class ClientListView(ListView):
-    model = Client
-    template_name = 'mail/home.html'
-
-
-class ClientUpdateView(UpdateView):
-    model = Client
-    fields = ('full_name', 'email', 'comment')
-    success_url = reverse_lazy('mail:home')
-
-
-class ClientDeleteView(DeleteView):
+class ClientListView(ListMixin, ListView):
     model = Client
 
 
-class SettingMailListView(ListView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
+    model = Client
+    form_class = ClientForm
+    success_url = reverse_lazy('mail:client')
+
+
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
+    model = Client
+    success_url = reverse_lazy('mail:client')
+
+
+class SettingMailListView(LoginRequiredMixin, ListMixin, ListView):
     model = SettingMail
 
 
-class SettingMailCreateView(CreateView):
+class SettingMailCreateView(LoginRequiredMixin, CreateMixin, CreateView):
     model = SettingMail
-    fields = '__all__'
+    form_class = SettingMailForm
+    success_url = reverse_lazy('mail:list_setting')
+
+    def get_form_kwargs(self):
+        """
+        Переопределяем метод для передачи user в форму SettingMailForm
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+
+class SettingUpdateView(LoginRequiredMixin, UpdateView):
+    model = SettingMail
+    form_class = SettingMailForm
     success_url = reverse_lazy('mail:list_setting')
 
 
-class SettingUpdateView(UpdateView):
+class SettingMailDeleteView(LoginRequiredMixin, DeleteView):
     model = SettingMail
-    fields = '__all__'
     success_url = reverse_lazy('mail:list_setting')
 
 
-class SettingMailDeleteView(DeleteView):
-    model = SettingMail
-
-
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin, ListMixin, ListView):
     model = Mailing
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateMixin, CreateView):
     model = Mailing
-    fields = ('setting', 'subject', 'text')
+    form_class = MailingForm
+    success_url = reverse_lazy('mail:list_mail')
+
+    def get_form_kwargs(self):
+        """
+        Переопределяем метод для передачи user в форму MailingForm
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+class MailingUpdateView(LoginRequiredMixin, UpdateView):
+    model = Mailing
+    form_class = MailingForm
     success_url = reverse_lazy('mail:list_mail')
 
 
-class MailingUpdateView(UpdateView):
+class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
-    fields = ('setting', 'subject', 'text')
     success_url = reverse_lazy('mail:list_mail')
 
 
-class MailingDeleteView(DeleteView):
-    model = Mailing
-
-
-class LogListView(ListView):
+class LogListView(LoginRequiredMixin, ListView):
     model = Log
+
+
+def title(request):
+    context = {'blog_list': random_blog(),
+               'count_mailing': len(get_cached_count_mailing()),
+               'count_active': len(get_cached_count_active()),
+               'count_client': len(get_cached_count_client())}
+    return render(request, 'mail/home.html', context=context)

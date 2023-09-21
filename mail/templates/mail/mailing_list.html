@@ -1,7 +1,7 @@
 {% extends 'mail/base.html'%}
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 text-primary">Письма</h1>
+    <h1 class="display-4 text-dark">Письма</h1>
 </div>
 
 <div class="container">
@@ -23,9 +23,9 @@
                 <td> {{object.text}}</td>
                                 <td>                        <div class="btn-group">
                                     <a href="{% url 'mail:edit_mail' object.pk %}"
-                       class="btn btn-sm btn-outline-success">Редактировать</a>
+                       class="btn btn-sm btn-outline-dark">Редактировать</a>
                                 <a href="{% url 'mail:delete_mail' object.pk %}"
-                       class="btn btn-sm btn-outline-danger">Удалить</a>
+                       class="btn btn-sm btn-outline-dark">Удалить</a>
                                 </div></td>
             </tr>
             </tbody>
@@ -37,9 +37,11 @@
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <div class="btn-group">
         <a href="{% url 'mail:create_mail' %}"
-              class="btn btn-lg btn-block btn-outline-primary">Добавить письмо</a>
+              class="btn btn-lg btn-block btn-outline-dark">Добавить письмо</a>
+        {% if user.is_superuser %}
             <a href="{% url 'mail:list_log' %}"
-           class="btn btn-lg btn-block btn-outline-primary">Детали</a>
+           class="btn btn-lg btn-block btn-outline-dark">Логи</a>
+        {% endif %}
     </div>
 </div>
 

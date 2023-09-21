@@ -10,8 +10,8 @@
                             {% csrf_token %}
                             <p>Удалить настройки?</p>
                             <div class="btn-group">
-                                <button type="submit" class="btn btn-success">Да</button>
-                                <a href="{% url 'mail:list_setting' %}" type="button" class="btn btn-danger">Отменить</a>
+                                <button type="submit" class="btn btn-outline-dark">Да</button>
+                                <a href="{% url 'mail:list_setting' %}" type="button" class="btn btn-outline-dark">Отменить</a>
                             </div>
                         </form>
                     </div>

@@ -2,29 +2,34 @@
 {% block content %}
 
 <div class="container">
-    <div class="row text-start">
+    <form method="post" class="row">
         <div class="col-8">
             <div class="card">
-                <div class="card-header">Добавление настройки</div>
+                <div class="card-header">
+                    {% if object %}
+                    Настройки
+                    {% else %}
+                    Добавление настройки
+                    {% endif %}
+                </div>
                 <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-outline-success">
-                                {% if object %}
-                                Сохранить
-                                {% else %}
-                                Создать
-                                {% endif %}
-                            </button>
-                            <a href="{% url 'mail:list_setting' %}"
-                               class="btn btn-outline-warning">Отмена</a>
-                        </div>
-                    </form>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-outline-dark">
+                            {% if object %}
+                            Сохранить
+                            {% else %}
+                            Создать
+                            {% endif %}
+                        </button>
+                        <a href="{% url 'mail:list_setting' %}"
+                           class="btn btn-outline-dark">Отмена</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    </form>
 </div>
 {% endblock %}

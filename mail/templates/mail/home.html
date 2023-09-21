@@ -1,49 +1,43 @@
 {% extends 'mail/base.html'%}
+{% load my_tags %}
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 text-primary">Клиенты</h1>
-</div>
 
-<div class="container">
-    <div class="row text-start">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ФИО</th>
-                <th scope="col">Email</th>
-                <th scope="col">Комментарий</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for object in object_list %}
-            <tr>
-                <th scope="row">{{object.full_name}}</th>
-                <td>{{ object.email}}</td>
-                <td> {{object.comment | truncatechars:20}}</td>
-                <td>
-                    <div class="btn-group">
-                        <a href="{% url 'mail:edit_client' object.pk %}"
-                           class="btn btn-sm btn-outline-success">Редактировать</a>
-                        <a href="{% url 'mail:delete_client' object.pk %}"
-                           class="btn btn-sm btn-outline-danger">Удалить</a>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-            {% endfor %}
-        </table>
+{% for blog in blog_list %}
+<div class="container" align="center">
+    <div class="col-6">
+        <div class="row">
+            <p></p>
+            <div class="card mb-4 box-shadow center">
+                <div class="card-head">
+                    {% if blog.image %}
+                    <img src="{% mediapath %}{{blog.image}}" class="card-img-top">
+                    {% else %}
+                    <img src="{% mediapath %}plug.png" class="card-img-top">
+                    {% endif %}
+                    <h1 class="my-0 font-weight-normal card-title" align="center">{{ blog.title }}</h1>
+                </div>
+                <div class="card-body">
+                    {% if blog.content|length < 101 %}
+                    <h6>{{blog.content}}</h6>
+                    {% else %}
+                    <h6>{{blog.content|truncatechars:100}}<a href="{% url 'blog:detail_blog' blog.id%}"
+                                                             class="link-underline-primary">Продолжить</a></h6>
+                    {% endif %}
+                    <p class="text" align="right">Дата создания: {{ blog.publication}} </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endfor %}
 
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <div class="btn-group">
-        <a href="{% url 'mail:create_client' %}"
-           class="btn btn-lg btn-block btn-outline-primary">Добавить клиента</a>
-        <a href="{% url 'mail:list_setting' %}"
-           class="btn btn-lg btn-block btn-outline-primary">Детали</a>
+<div class="container" align="center">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h2 class="display-2 text-dark">Статистика</h2>
     </div>
+    <h3><p>Количество уникальных клиентов: {{count_client}}</p>
+        <p>Общие число рассылок: {{count_mailing}}</p>
+        <p>Количество активных рассылок: {{count_active}}</p></h3>
+
 </div>
-
-
 {% endblock %}
