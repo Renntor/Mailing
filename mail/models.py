@@ -32,7 +32,7 @@ class SettingMail(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, **NULLABLE, verbose_name='клиент')
 
     mailing_time = models.TimeField(verbose_name='время рассылки')
-    period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность', )
+    period = models.PositiveIntegerField(choices=choice_period, verbose_name='периодичность')
     status = models.BooleanField(default=False, verbose_name='статус')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,

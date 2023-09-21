@@ -8,13 +8,13 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
     """
 
     """
+
     class Meta:
         model = Client
         exclude = ('owner',)
 
 
 class SettingMailForm(StyleFormMixin, forms.ModelForm):
-    # mailing_time = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -22,7 +22,6 @@ class SettingMailForm(StyleFormMixin, forms.ModelForm):
         self.user = user
         if self.user:
             self.fields['client'].queryset = Client.objects.filter(owner=self.user)
-
 
     class Meta:
         model = SettingMail

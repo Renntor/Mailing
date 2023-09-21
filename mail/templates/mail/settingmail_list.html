@@ -18,21 +18,21 @@
             </thead>
             <tbody>
             {% for object in object_list %}
-            {% if object.client.owner == user or user.is_staff %}
             <tr>
                 <th scope="row">{{object.client.email}}</th>
                 <td>{{ object.mailing_time}}</td>
                 <td> {{object.period}} дней</td>
                 <td> {{object.status}}</td>
-                                <td>                        <div class="btn-group">
-                                    <a href="{% url 'mail:edit_setting' object.pk %}"
-                       class="btn btn-sm btn-outline-dark">Редактировать</a>
-                                <a href="{% url 'mail:delete_setting' object.pk %}"
-                       class="btn btn-sm btn-outline-dark">Удалить</a>
-                                </div></td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'mail:edit_setting' object.pk %}"
+                           class="btn btn-sm btn-outline-dark">Редактировать</a>
+                        <a href="{% url 'mail:delete_setting' object.pk %}"
+                           class="btn btn-sm btn-outline-dark">Удалить</a>
+                    </div>
+                </td>
             </tr>
             </tbody>
-            {% endif %}
             {% endfor %}
         </table>
     </div>
@@ -41,8 +41,8 @@
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <div class="btn-group">
         <a href="{% url 'mail:create_setting' %}"
-              class="btn btn-lg btn-block btn-outline-dark">Добавить настройки</a>
-            <a href="{% url 'mail:list_mail' %}"
+           class="btn btn-lg btn-block btn-outline-dark">Добавить настройки</a>
+        <a href="{% url 'mail:list_mail' %}"
            class="btn btn-lg btn-block btn-outline-dark">Письма</a>
     </div>
 </div>

@@ -1,4 +1,3 @@
-import random
 
 from mail.models import Mailing, Log, SettingMail, Client
 from blog.models import Blog
@@ -6,6 +5,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import datetime
 from django.core.cache import cache
+from users.models import User
 
 
 def _send_mail(subject: str, text: str, mail: list) -> None:
@@ -84,7 +84,7 @@ def get_cached_count_client():
         key = 'count_client'
         count_client = cache.get(key)
         if count_client is None:
-            count_client = Client.objects.all()
+            count_client = User.objects.all()
             cache.set(key, count_client)
 
         return count_client

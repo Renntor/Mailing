@@ -38,8 +38,10 @@
     <div class="btn-group">
         <a href="{% url 'mail:create_mail' %}"
               class="btn btn-lg btn-block btn-outline-dark">Добавить письмо</a>
+        {% if user.is_superuser %}
             <a href="{% url 'mail:list_log' %}"
            class="btn btn-lg btn-block btn-outline-dark">Логи</a>
+        {% endif %}
     </div>
 </div>
 
