@@ -5,7 +5,7 @@ from django import forms
 
 class StyleFormMixin:
     """
-
+    Миксин для стилизации форм
     """
     def __init__(self, *args, **kwargs):
 
